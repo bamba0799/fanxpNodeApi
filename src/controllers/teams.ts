@@ -221,3 +221,74 @@ export async function deleteTeam(req: Request, res: Response) {
     });
   }
 }
+
+export async function addToAGroup(req: Request, res: Response) {
+  const { teamId, groupId } = req.body;
+
+  try {
+    if (!teamId || !groupId) {
+      res.status(400);
+      throw new Error('Missing parameters');
+    }
+
+    const team = await prisma.team
+      .update({
+        where: {
+          id: teamId,
+        },
+        data: {
+          isMemberOfCurrentCAN: true,
+          group: {
+            connect: {
+              id: groupId,
+            },
+          },
+        },
+      })
+      .catch((e) => {
+        res.status(422);
+        throw e;
+      });
+
+    res.status(201).json(team);
+  } catch (e: any) {
+    res.json({
+      name: e.name,
+      message: e.message,
+    });
+  }
+}
+
+export async function removeToAGroup(req: Request, res: Response) {
+  const { teamId } = req.body;
+
+  try {
+    if (!teamId) {
+      res.status(400);
+      throw new Error('Missing parameters');
+    }
+
+    const team = await prisma.team
+      .update({
+        where: {
+          id: teamId,
+        },
+        data: {
+          group: {
+            disconnect: true,
+          },
+        },
+      })
+      .catch((e) => {
+        res.status(422);
+        throw e;
+      });
+
+    res.status(201).json(team);
+  } catch (e: any) {
+    res.json({
+      name: e.name,
+      message: e.message,
+    });
+  }
+}
