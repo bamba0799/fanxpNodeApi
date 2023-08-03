@@ -106,6 +106,7 @@ enum MatchStatus {
 
 model Stadium {
   id       String  @id @default(uuid())
+  name     String  @unique
   city     String  @db.VarChar(50)
   location String
   contact  String  @unique @db.VarChar(20)
