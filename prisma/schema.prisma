@@ -1,0 +1,257 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                       String                     @id @default(uuid())
+  firstName                String?                    @db.VarChar(255)
+  lastName                 String?                    @db.VarChar(100)
+  address                  String?                    @db.VarChar(255)
+  residence                String?                    @db.VarChar(100)
+  nationality              String?                    @db.VarChar(100)
+  contact                  String                     @unique @db.VarChar(20)
+  photo                    String?                    @db.Text
+  matchTicketUser          MatchTicketUser[]
+  questionQuizResponseUser QuestionQuizResponseUser[]
+  followedTeams            TeamUser[]
+}
+
+model Ticket {
+  id              String            @id @default(uuid())
+  matricule       String            @unique
+  categoryId      String
+  seatId          String            @unique
+  matchTicketUser MatchTicketUser[]
+
+  category TicketCategory @relation(fields: [categoryId], references: [id])
+  seat     Seat           @relation(fields: [seatId], references: [id])
+}
+
+model TicketCategory {
+  id      String   @id @default(uuid())
+  label   String
+  price   Int
+  tickets Ticket[]
+}
+
+model MatchTicketUser {
+  userId   String
+  ticketId String
+  matchId  String
+  date     DateTime
+  point    Int?
+
+  user   User   @relation(fields: [userId], references: [id])
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+  match  Match  @relation(fields: [matchId], references: [id])
+
+  @@id([matchId, ticketId, userId])
+}
+
+enum StageLabel {
+  group
+  sixteen
+  quarter
+  semi
+  final
+}
+
+model Stage {
+  id             String           @id @default(uuid())
+  label          StageLabel
+  debut          DateTime
+  end            DateTime
+  matchStageTeam MatchStageTeam[]
+}
+
+model Team {
+  id                   String           @id @default(uuid())
+  name                 String           @unique @db.VarChar(75)
+  code                 String           @unique @db.VarChar(3)
+  flag                 String           @db.Text
+  isMemberOfCurrentCAN Boolean
+  isDiqualified        Boolean
+  groupId              String?
+  matchStageTeam       MatchStageTeam[]
+  players              Player[]
+  followingUsers       TeamUser[]
+
+  group Group? @relation(fields: [groupId], references: [id])
+}
+
+model TeamUser {
+  teamId     String
+  userId     String
+  followedAt DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@id([teamId, userId])
+}
+
+enum MatchStatus {
+  next
+  live
+  over
+}
+
+model Stadium {
+  id       String  @id @default(uuid())
+  city     String  @db.VarChar(50)
+  location String
+  contact  String  @unique @db.VarChar(20)
+  photo    String  @db.Text
+  matchs   Match[]
+  seats    Seat[]
+}
+
+model Seat {
+  id        String  @id @default(uuid())
+  row       Int
+  stadiumId String
+  ticket    Ticket?
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id])
+}
+
+model Match {
+  id              String            @id @default(uuid())
+  date            DateTime
+  time            DateTime
+  status          MatchStatus
+  stadiumId       String
+  matchStageTeam  MatchStageTeam[]
+  matchTicketUser MatchTicketUser[]
+
+  stadium Stadium @relation(fields: [stadiumId], references: [id])
+}
+
+model MatchStageTeam {
+  matchId    String
+  stageId    String
+  teamId     String
+  isWinner   Boolean?
+  goals      Int?
+  possession Int?
+  corners    Int?
+  fouls      Int?
+  assists    Int?
+  offsides   Int?
+  redCards   Int?
+  yellowCard Int?
+  // TODO: complete if possible
+
+  match Match @relation(fields: [matchId], references: [id])
+  stage Stage @relation(fields: [stageId], references: [id])
+  team  Team  @relation(fields: [teamId], references: [id])
+
+  @@id([matchId, stageId, teamId])
+}
+
+enum GroupLabel {
+  a
+  b
+  c
+  d
+  e
+  f
+}
+
+enum PlayerPosition {
+  goalkeeper
+  defender
+  midfielder
+  stricker
+}
+
+model Group {
+  id    String     @id @default(uuid())
+  label GroupLabel
+  teams Team[]
+}
+
+model Player {
+  id              String         @id @default(uuid())
+  firstName       String
+  lastName        String         @db.VarChar(50)
+  jerseyNumber    Int            @db.TinyInt
+  position        PlayerPosition
+  birthday        DateTime
+  intlCareerGoals Int?
+  club            String?
+  photo           String?        @db.Text
+  teamId          String
+  team            Team           @relation(fields: [teamId], references: [id])
+}
+
+model GoodDeal {
+  id              String  @id @default(uuid())
+  label           String
+  photo           String  @db.Text
+  interestPointId String?
+
+  interestPoint InterestPoint? @relation(fields: [interestPointId], references: [id])
+}
+
+model InterestPointCategory {
+  id             String          @id @default(uuid())
+  label          String
+  interestPoints InterestPoint[]
+}
+
+model InterestPoint {
+  id                      String     @id @default(uuid())
+  name                    String
+  location                String
+  contact                 String
+  shortDescription        String     @db.TinyText
+  longDescription         String     @db.Text
+  vip                     Boolean    @default(false)
+  interestPointCategoryId String
+  goodDeals               GoodDeal[]
+
+  InterestPointCategory InterestPointCategory @relation(fields: [interestPointCategoryId], references: [id])
+}
+
+model Quiz {
+  id                       String                     @id @default(uuid())
+  label                    String
+  questionQuizResponseUser QuestionQuizResponseUser[]
+}
+
+model Question {
+  id                       String                     @id @default(uuid())
+  label                    String
+  questionQuizResponseUser QuestionQuizResponseUser[]
+}
+
+model Response {
+  id                       String                     @id @default(uuid())
+  value                    String
+  isCorrect                Boolean
+  questionQuizResponseUser QuestionQuizResponseUser[]
+}
+
+model QuestionQuizResponseUser {
+  questionId String
+  quizId     String
+  responseId String
+  userId     String
+  point      Int?
+
+  question Question @relation(fields: [questionId], references: [id])
+  quiz     Quiz     @relation(fields: [quizId], references: [id])
+  response Response @relation(fields: [responseId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@id([questionId, quizId, responseId, userId])
+}
