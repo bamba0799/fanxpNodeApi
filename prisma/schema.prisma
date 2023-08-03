@@ -46,7 +46,7 @@ model MatchTicketUser {
   userId   String
   ticketId String
   matchId  String
-  date     DateTime
+  date     DateTime @default(now())
   point    Int?
 
   user   User   @relation(fields: [userId], references: [id])
@@ -126,7 +126,7 @@ model Seat {
 
 model Match {
   id              String            @id @default(uuid())
-  date            DateTime
+  date            DateTime          @db.Date
   time            DateTime
   status          MatchStatus
   stadiumId       String
@@ -186,7 +186,7 @@ model Player {
   lastName        String         @db.VarChar(50)
   jerseyNumber    Int            @db.TinyInt
   position        PlayerPosition
-  birthday        DateTime
+  birthday        DateTime       @db.Date
   intlCareerGoals Int?
   club            String?
   photo           String?        @db.Text
