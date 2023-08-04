@@ -10,8 +10,8 @@ import matchsRouter from '@/routes/matchs';
 import stagesRouter from '@/routes/stages';
 import extraRouter from '@/routes/extra';
 import userRouter from '@/routes/user';
-// import ticketsRouter from '@/routes/tickets';
 import ticketCategoryRouter from '@/routes/tickets/category';
+import ticketsRouter from '@/routes/tickets';
 
 const app = express();
 
@@ -27,8 +27,8 @@ app.use('/api/matchs', matchsRouter);
 app.use('/api/stages', stagesRouter);
 app.use('/api/extra', extraRouter);
 app.use('/api/user', userRouter);
-app.use('/api/tickets/category', ticketCategoryRouter);
-// app.use('/api/tickets', ticketsRouter);
+app.use('/api/ticket-category', ticketCategoryRouter);
+app.use('/api/tickets', ticketsRouter);
 
 app.listen(parseInt(PORT!), () => {
   console.log(`Live on http://localhost:${PORT}`);
