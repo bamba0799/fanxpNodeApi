@@ -85,31 +85,40 @@ export async function getFavTeams(req: Request, res: Response) {
             id: userId,
           },
           select: {
-            followedTeams: {
-              select: {
-                followedAt: fields.includes('followedAt'),
-                teamId: fields.includes('teamId'),
-                userId: fields.includes('userId'),
-                team: fields.includes('team'),
-                user: fields.includes('user')
-                  ? {
-                      select: {
-                        id: true,
-                        firstName: true,
-                        lastName: true,
-                        contact: true,
-                        nationality: true,
-                        photo: true,
-                      },
-                    }
-                  : false,
-              },
-              orderBy: {
-                team: {
-                  name: 'asc',
+            _count: fields.includes('_count')
+              ? {
+                  select: {
+                    followedTeams: true,
+                  },
+                }
+              : false,
+            followedTeams: fields.includes('_count')
+              ? false
+              : {
+                  select: {
+                    followedAt: fields.includes('followedAt'),
+                    teamId: fields.includes('teamId'),
+                    userId: fields.includes('userId'),
+                    team: fields.includes('team'),
+                    user: fields.includes('user')
+                      ? {
+                          select: {
+                            id: true,
+                            firstName: true,
+                            lastName: true,
+                            contact: true,
+                            nationality: true,
+                            photo: true,
+                          },
+                        }
+                      : false,
+                  },
+                  orderBy: {
+                    team: {
+                      name: 'asc',
+                    },
+                  },
                 },
-              },
-            },
           },
         })
         .catch((e) => {
