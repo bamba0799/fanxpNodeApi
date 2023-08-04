@@ -53,7 +53,7 @@ model MatchTicketUser {
   ticket Ticket @relation(fields: [ticketId], references: [id])
   match  Match  @relation(fields: [matchId], references: [id])
 
-  @@id([matchId, ticketId, userId])
+  @@unique([matchId, ticketId, userId])
 }
 
 enum StageLabel {
@@ -95,7 +95,7 @@ model TeamUser {
   team Team @relation(fields: [teamId], references: [id])
   user User @relation(fields: [userId], references: [id])
 
-  @@id([teamId, userId])
+  @@unique([teamId, userId])
 }
 
 enum MatchStatus {
@@ -155,7 +155,7 @@ model MatchStageTeam {
   stage Stage @relation(fields: [stageId], references: [id])
   team  Team  @relation(fields: [teamId], references: [id])
 
-  @@id([matchId, stageId, teamId])
+  @@unique([matchId, stageId, teamId])
 }
 
 enum GroupLabel {
@@ -254,5 +254,5 @@ model QuestionQuizResponseUser {
   response Response @relation(fields: [responseId], references: [id])
   user     User     @relation(fields: [userId], references: [id])
 
-  @@id([questionId, quizId, responseId, userId])
+  @@unique([questionId, quizId, responseId, userId])
 }
