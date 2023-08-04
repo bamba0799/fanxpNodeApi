@@ -8,6 +8,7 @@ import stadiumsRouter from '@/routes/stadiums';
 import groupsRouter from '@/routes/groups';
 import matchsRouter from '@/routes/matchs';
 import stagesRouter from '@/routes/stages';
+import extraRouter from '@/routes/extra';
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use('/api/stadiums', stadiumsRouter);
 app.use('/api/groups', groupsRouter);
 app.use('/api/matchs', matchsRouter);
 app.use('/api/stages', stagesRouter);
+app.use('/api/extra', extraRouter);
 
 app.listen(parseInt(PORT!), () => {
   console.log(`Live on http://localhost:${PORT}`);
