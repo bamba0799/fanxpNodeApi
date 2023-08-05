@@ -22,6 +22,15 @@ model User {
   matchTicketUser          MatchTicketUser[]
   questionQuizResponseUser QuestionQuizResponseUser[]
   followedTeams            TeamUser[]
+  otp                      OTP[]
+}
+
+model OTP {
+  id          String @id @default(cuid())
+  value       String
+  userContact String
+
+  user User @relation(fields: [userContact], references: [contact])
 }
 
 model Ticket {
