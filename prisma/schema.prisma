@@ -226,20 +226,28 @@ model InterestPoint {
 model Quiz {
   id                       String                     @id @default(uuid())
   label                    String
+  questions                Question[]
   questionQuizResponseUser QuestionQuizResponseUser[]
 }
 
 model Question {
   id                       String                     @id @default(uuid())
   label                    String
+  suggestedResponses       Response[]
   questionQuizResponseUser QuestionQuizResponseUser[]
+  quizId                   String
+
+  quiz Quiz @relation(fields: [quizId], references: [id])
 }
 
 model Response {
   id                       String                     @id @default(uuid())
   value                    String
   isCorrect                Boolean
+  questionId               String
   questionQuizResponseUser QuestionQuizResponseUser[]
+
+  question Question @relation(fields: [questionId], references: [id])
 }
 
 model QuestionQuizResponseUser {
