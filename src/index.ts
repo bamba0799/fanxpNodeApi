@@ -12,6 +12,7 @@ import extraRouter from '@/routes/extra';
 import userRouter from '@/routes/user';
 import ticketCategoryRouter from '@/routes/tickets/category';
 import ticketsRouter from '@/routes/tickets';
+import quizRouter from '@/routes/quiz';
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/extra', extraRouter);
 app.use('/api/user', userRouter);
 app.use('/api/ticket-category', ticketCategoryRouter);
 app.use('/api/tickets', ticketsRouter);
+app.use('/api/quiz', quizRouter);
 
 app.listen(parseInt(PORT!), () => {
   console.log(`Live on http://localhost:${PORT}`);
