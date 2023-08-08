@@ -34,7 +34,7 @@ deploy:
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker login docker-registry.odc.ci -u odc-oda -pDigital1"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker pull $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID"
     - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker container rm -f $APP_NAME || true"
-    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 3000:3000 --name $APP_NAME $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID"
+    - ssh -i $ID_RSA -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "docker run -d -p 9200:9200 --name $APP_NAME $DOCKER_REGISTRY/$APP_NAME:$CI_PIPELINE_IID"
 
   environment:
     name: production
