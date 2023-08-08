@@ -1,0 +1,9 @@
+# folders
+node_modules
+dist
+
+# logs
+*debug.log
+
+# env
+.env.dev

@@ -1,7 +1,13 @@
 import { config } from 'dotenv';
+import path from 'path';
 
 // load .env
-config();
+config({
+  path: path.resolve(
+    process.cwd(),
+    process.env.NODE_ENV === 'production' ? '.env.prod' : '.env.dev',
+  ),
+});
 
 export const PORT = process.env.PORT;
 
