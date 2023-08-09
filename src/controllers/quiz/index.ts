@@ -2,7 +2,7 @@ import { prisma } from '@/lib/db';
 import { Request, Response } from 'express';
 
 export async function createQuiz(req: Request, res: Response) {
-  const { label } = req.body;
+  const { label, date } = req.body;
 
   try {
     if (!label) {
@@ -14,6 +14,7 @@ export async function createQuiz(req: Request, res: Response) {
       .create({
         data: {
           label,
+          date: date ?? null,
         },
       })
       .catch((e) => {
@@ -169,7 +170,7 @@ export async function getOneQuiz(req: Request, res: Response) {
 }
 
 export async function updateQuiz(req: Request, res: Response) {
-  const { label } = req.body;
+  const { label, date } = req.body;
 
   try {
     if (!label) {
@@ -184,6 +185,7 @@ export async function updateQuiz(req: Request, res: Response) {
         },
         data: {
           label,
+          date: date ?? null,
         },
       })
       .catch((e) => {
