@@ -235,6 +235,7 @@ model InterestPoint {
 model Quiz {
   id                       String                     @id @default(uuid())
   label                    String
+  date                     DateTime?                  @db.Timestamp()
   questions                Question[]
   questionQuizResponseUser QuestionQuizResponseUser[]
 }
