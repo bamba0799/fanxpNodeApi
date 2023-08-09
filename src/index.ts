@@ -1,5 +1,6 @@
 import 'module-alias/register';
 import express from 'express';
+import cors from 'cors';
 import { PORT } from '@/constants/variables';
 
 // routers
@@ -18,6 +19,7 @@ import quizRouter from '@/routes/quiz';
 const app = express();
 
 // middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
