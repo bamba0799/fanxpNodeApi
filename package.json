@@ -4,7 +4,7 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon",
+    "dev": "nodemon",
     "build": "tsc",
     "start": "yarn build && NODE_ENV=production ts-node dist/index.js",
     "db:migrate": "dotenv -e .env.dev -- npx prisma migrate dev",
