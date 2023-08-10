@@ -25,7 +25,7 @@ export async function createTeam(req: Request, res: Response) {
           flag,
           isMemberOfCurrentCAN,
           isDiqualified: isMemberOfCurrentCAN ? isDiqualified : false,
-          groupId: isMemberOfCurrentCAN ? groupId : null,
+          groupId: groupId || null,
         },
       })
       .catch((e) => {
@@ -181,7 +181,7 @@ export async function updateTeam(req: Request, res: Response) {
           flag,
           isMemberOfCurrentCAN,
           isDiqualified,
-          groupId: groupId ?? null,
+          groupId: groupId || null,
         },
       })
       .catch((e) => {
