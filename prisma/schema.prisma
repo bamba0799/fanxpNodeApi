@@ -117,8 +117,8 @@ model Stadium {
   id       String  @id @default(uuid())
   name     String  @unique
   city     String  @db.VarChar(50)
+  capacity Int
   location String
-  contact  String  @unique @db.VarChar(20)
   photo    String  @db.Text
   matchs   Match[]
   seats    Seat[]

@@ -2,10 +2,10 @@ import { prisma } from '@/lib/db';
 import { Request, Response } from 'express';
 
 export async function createStadium(req: Request, res: Response) {
-  const { name, city, contact, location, photo } = req.body;
+  const { name, city, capacity, location, photo } = req.body;
 
   try {
-    if (!name || !city || !contact || !location || !photo) {
+    if (!name || !city || !capacity || !location || !photo) {
       res.status(400);
       throw new Error('Missing parameters');
     }
@@ -15,7 +15,7 @@ export async function createStadium(req: Request, res: Response) {
         data: {
           name,
           city,
-          contact,
+          capacity,
           location,
           photo,
         },
@@ -50,7 +50,6 @@ export async function getStadiums(req: Request, res: Response) {
             id: fields.includes('id'),
             name: fields.includes('name'),
             city: fields.includes('city'),
-            contact: fields.includes('contact'),
             location: fields.includes('location'),
             matchs: fields.includes('matchs'),
             photo: fields.includes('photo'),
@@ -107,7 +106,6 @@ export async function getOneStadiums(req: Request, res: Response) {
             id: fields.includes('id'),
             name: fields.includes('name'),
             city: fields.includes('city'),
-            contact: fields.includes('contact'),
             location: fields.includes('location'),
             matchs: fields.includes('matchs'),
             photo: fields.includes('photo'),
@@ -143,9 +141,14 @@ export async function getOneStadiums(req: Request, res: Response) {
 
 export async function updateStadium(req: Request, res: Response) {
   const { stadiumId } = req.params;
-  const { name, city, contact, location, photo } = req.body;
+  const { name, city, capacity, location, photo } = req.body;
 
   try {
+    if (!name || !city || !capacity || !location || !photo) {
+      res.status(400);
+      throw new Error('Missing parameters');
+    }
+
     const stadium = await prisma.stadium
       .update({
         where: {
@@ -154,7 +157,7 @@ export async function updateStadium(req: Request, res: Response) {
         data: {
           name,
           city,
-          contact,
+          capacity,
           location,
           photo,
         },
