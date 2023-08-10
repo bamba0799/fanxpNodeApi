@@ -93,12 +93,11 @@ CREATE TABLE `Stadium` (
     `id` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `city` VARCHAR(50) NOT NULL,
+    `capacity` INTEGER NOT NULL,
     `location` VARCHAR(191) NOT NULL,
-    `contact` VARCHAR(20) NOT NULL,
     `photo` TEXT NOT NULL,
 
     UNIQUE INDEX `Stadium_name_key`(`name`),
-    UNIQUE INDEX `Stadium_contact_key`(`contact`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -200,6 +199,7 @@ CREATE TABLE `InterestPoint` (
 CREATE TABLE `Quiz` (
     `id` VARCHAR(191) NOT NULL,
     `label` VARCHAR(191) NOT NULL,
+    `date` TIMESTAMP NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
