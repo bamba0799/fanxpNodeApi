@@ -50,6 +50,7 @@ export async function getManyQuiz(req: Request, res: Response) {
                   select: {
                     id: true,
                     label: true,
+                    duration: true,
                     suggestedResponses: fields.includes('responses')
                       ? {
                           select: {
@@ -119,6 +120,7 @@ export async function getOneQuiz(req: Request, res: Response) {
                   select: {
                     id: true,
                     label: true,
+                    duration: true,
                     suggestedResponses: fields.includes('responses')
                       ? {
                           select: {

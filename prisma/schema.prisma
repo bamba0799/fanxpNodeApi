@@ -246,6 +246,7 @@ model Question {
   suggestedResponses       Response[]
   questionQuizResponseUser QuestionQuizResponseUser[]
   quizId                   String
+  duration                 Int?                       @db.TinyInt
 
   quiz Quiz @relation(fields: [quizId], references: [id])
 }
