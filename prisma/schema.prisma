@@ -223,6 +223,7 @@ model InterestPoint {
   name                    String
   location                String
   contact                 String
+  photo                   String?    @db.Text
   shortDescription        String     @db.TinyText
   longDescription         String     @db.Text
   vip                     Boolean    @default(false)
