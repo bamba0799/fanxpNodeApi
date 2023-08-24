@@ -43,7 +43,7 @@ export async function createTeam(req: Request, res: Response) {
 }
 
 export async function getTeams(req: Request, res: Response) {
-  const { fields: qF } = req.query;
+  const { fields: qF, current } = req.query;
 
   try {
     let result;
@@ -53,6 +53,12 @@ export async function getTeams(req: Request, res: Response) {
     if (fields) {
       result = await prisma.team
         .findMany({
+          where: current
+            ? {
+                isMemberOfCurrentCAN:
+                  (current as string) === '1' ? true : false,
+              }
+            : undefined,
           select: {
             _count: fields.includes('_count'),
             id: fields.includes('id'),
@@ -82,6 +88,11 @@ export async function getTeams(req: Request, res: Response) {
     // Query every fields
     result = await prisma.team
       .findMany({
+        where: current
+          ? {
+              isMemberOfCurrentCAN: (current as string) === '1' ? true : false,
+            }
+          : undefined,
         orderBy: { name: 'asc' },
       })
       .catch((e) => {

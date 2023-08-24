@@ -43,7 +43,13 @@ export async function getGroups(req: Request, res: Response) {
             _count: fields.includes('_count'),
             id: fields.includes('id'),
             label: fields.includes('label'),
-            teams: fields.includes('teams'),
+            teams: fields.includes('teams')
+              ? {
+                  orderBy: {
+                    name: 'asc',
+                  },
+                }
+              : false,
           },
           orderBy: {
             label: 'asc',
@@ -95,7 +101,13 @@ export async function getOneGroup(req: Request, res: Response) {
             _count: fields.includes('_count'),
             id: fields.includes('id'),
             label: fields.includes('label'),
-            teams: fields.includes('teams'),
+            teams: fields.includes('teams')
+              ? {
+                  orderBy: {
+                    name: 'asc',
+                  },
+                }
+              : false,
           },
         })
         .catch((e) => {

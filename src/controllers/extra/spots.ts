@@ -75,6 +75,7 @@ export async function getSpots(req: Request, res: Response) {
             longDescription: fields.includes('longDescription'),
             name: fields.includes('name'),
             location: fields.includes('location'),
+            photo: fields.includes('photo'),
             shortDescription: fields.includes('shortDescription'),
             vip: fields.includes('vip'),
             goodDeals: fields.includes('goodDeals')
@@ -169,6 +170,7 @@ export async function getOneSpot(req: Request, res: Response) {
             longDescription: fields.includes('longDescription'),
             name: fields.includes('name'),
             location: fields.includes('location'),
+            photo: fields.includes('photo'),
             shortDescription: fields.includes('shortDescription'),
             vip: fields.includes('vip'),
             goodDeals: fields.includes('goodDeals')

@@ -43,8 +43,9 @@ export async function getManyQuiz(req: Request, res: Response) {
       result = await prisma.quiz
         .findMany({
           select: {
-            id: true,
-            label: true,
+            id: fields.includes('id'),
+            label: fields.includes('label'),
+            date: fields.includes('date'),
             questions: fields.includes('questions')
               ? {
                   select: {
@@ -113,8 +114,9 @@ export async function getOneQuiz(req: Request, res: Response) {
             id: req.params.quizId,
           },
           select: {
-            id: true,
-            label: true,
+            id: fields.includes('id'),
+            label: fields.includes('label'),
+            date: fields.includes('date'),
             questions: fields.includes('questions')
               ? {
                   select: {

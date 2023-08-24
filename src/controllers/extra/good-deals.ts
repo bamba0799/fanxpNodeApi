@@ -189,7 +189,7 @@ export async function updateDeal(req: Request, res: Response) {
   try {
     if (!label || !photo) {
       res.status(400);
-      throw new Error("Missing parameter: 'label'");
+      throw new Error('Missing parameters');
     }
 
     const deal = await prisma.goodDeal
