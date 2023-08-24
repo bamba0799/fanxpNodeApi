@@ -1,7 +1,10 @@
 import express from 'express';
 import * as usersHandlers from '@/controllers/user';
+import * as userHandlers from '@/controllers/user';
 
 const router = express.Router();
+
+router.route('/').get(userHandlers.getUser);
 
 // fav teams
 router.post('/fav-teams/follow', usersHandlers.addFavTeam);

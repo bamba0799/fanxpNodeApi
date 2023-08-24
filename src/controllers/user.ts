@@ -1,6 +1,37 @@
 import { prisma } from '@/lib/db';
 import { Request, Response } from 'express';
 
+export async function getUser(req: Request, res: Response) {
+  try {
+    const user = await prisma.user
+      .findUnique({
+        where: {
+          id: req.user.id,
+        },
+        select: {
+          id: true,
+          contact: true,
+          firstName: true,
+          lastName: true,
+          nationality: true,
+          address: true,
+          residence: true,
+        },
+      })
+      .catch((e) => {
+        res.status(422);
+        throw e;
+      });
+
+    res.json(user);
+  } catch (e: any) {
+    res.json({
+      name: e.name ?? 'Error',
+      message: e.message,
+    });
+  }
+}
+
 // fav teams
 export async function addFavTeam(req: Request, res: Response) {
   const { userId, teamId } = req.body;
