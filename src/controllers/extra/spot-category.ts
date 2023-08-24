@@ -29,7 +29,7 @@ export async function createCategory(req: Request, res: Response) {
 }
 
 export async function getCategories(req: Request, res: Response) {
-  const { fields: qF } = req.query;
+  const { fields: qF, status } = req.query;
 
   try {
     let result;
@@ -45,21 +45,32 @@ export async function getCategories(req: Request, res: Response) {
             label: fields.includes('label'),
             interestPoints: fields.includes('spots')
               ? {
+                  where:
+                    (status as string)?.toLowerCase() === 'vip'
+                      ? {
+                          vip: true,
+                        }
+                      : undefined,
                   select: {
                     contact: true,
                     id: true,
                     location: true,
+                    photo: true,
                     shortDescription: true,
                     name: true,
                     vip: true,
-                    goodDeals: {
-                      select: {
-                        id: true,
-                        label: true,
-                        photo: true,
-                      },
-                    },
+                    goodDeals: fields.includes('promotions')
+                      ? {
+                          select: {
+                            id: true,
+                            label: true,
+                            photo: true,
+                          },
+                        }
+                      : false,
                   },
+                  take:
+                    (status as string)?.toLowerCase() === 'vip' ? 3 : undefined,
                 }
               : false,
           },
@@ -75,30 +86,31 @@ export async function getCategories(req: Request, res: Response) {
       return res.json(result);
     }
 
-    // full query
+    // base query
     result = await prisma.interestPointCategory
       .findMany({
         select: {
           id: true,
           label: true,
-          interestPoints: {
-            select: {
-              id: true,
-              contact: true,
-              location: true,
-              shortDescription: true,
-              name: true,
-              vip: true,
-              goodDeals: {
-                select: {
-                  id: true,
-                  label: true,
-                  photo: true,
-                },
-              },
-            },
-          },
+          interestPoints:
+            (status as string)?.toLowerCase() === 'vip'
+              ? {
+                  where: {
+                    vip: true,
+                  },
+                  select: {
+                    contact: true,
+                    id: true,
+                    location: true,
+                    photo: true,
+                    shortDescription: true,
+                    name: true,
+                    vip: true,
+                  },
+                }
+              : undefined,
         },
+        take: (status as string)?.toLowerCase() === 'vip' ? 3 : undefined,
         orderBy: {
           label: 'asc',
         },
@@ -141,16 +153,19 @@ export async function getOneCategory(req: Request, res: Response) {
                     contact: true,
                     id: true,
                     location: true,
+                    photo: true,
                     shortDescription: true,
                     name: true,
                     vip: true,
-                    goodDeals: {
-                      select: {
-                        id: true,
-                        label: true,
-                        photo: true,
-                      },
-                    },
+                    goodDeals: fields.includes('promotions')
+                      ? {
+                          select: {
+                            id: true,
+                            label: true,
+                            photo: true,
+                          },
+                        }
+                      : false,
                   },
                 }
               : false,
@@ -164,7 +179,7 @@ export async function getOneCategory(req: Request, res: Response) {
       return res.json(result);
     }
 
-    // full query
+    // basr query
     result = await prisma.interestPointCategory
       .findUnique({
         where: {
@@ -173,23 +188,6 @@ export async function getOneCategory(req: Request, res: Response) {
         select: {
           id: true,
           label: true,
-          interestPoints: {
-            select: {
-              id: true,
-              contact: true,
-              location: true,
-              shortDescription: true,
-              name: true,
-              vip: true,
-              goodDeals: {
-                select: {
-                  id: true,
-                  label: true,
-                  photo: true,
-                },
-              },
-            },
-          },
         },
       })
       .catch((e) => {
