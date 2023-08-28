@@ -276,3 +276,9 @@ model QuestionQuizResponseUser {
 
   @@unique([questionId, quizId, responseId, userId])
 }
+
+model Admin {
+  id       String @id @default(uuid())
+  username String @unique
+  password String @db.VarChar(255)
+}

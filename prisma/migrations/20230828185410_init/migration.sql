@@ -187,6 +187,7 @@ CREATE TABLE `InterestPoint` (
     `name` VARCHAR(191) NOT NULL,
     `location` VARCHAR(191) NOT NULL,
     `contact` VARCHAR(191) NOT NULL,
+    `photo` TEXT NULL,
     `shortDescription` TINYTEXT NOT NULL,
     `longDescription` TEXT NOT NULL,
     `vip` BOOLEAN NOT NULL DEFAULT false,
@@ -209,6 +210,7 @@ CREATE TABLE `Question` (
     `id` VARCHAR(191) NOT NULL,
     `label` VARCHAR(191) NOT NULL,
     `quizId` VARCHAR(191) NOT NULL,
+    `duration` TINYINT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -232,6 +234,16 @@ CREATE TABLE `QuestionQuizResponseUser` (
     `point` INTEGER NULL,
 
     UNIQUE INDEX `QuestionQuizResponseUser_questionId_quizId_responseId_userId_key`(`questionId`, `quizId`, `responseId`, `userId`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Admin` (
+    `id` VARCHAR(191) NOT NULL,
+    `username` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+
+    UNIQUE INDEX `Admin_username_key`(`username`),
+    PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- AddForeignKey
