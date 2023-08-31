@@ -1,10 +1,11 @@
 import express from 'express';
 import * as usersHandlers from '@/controllers/user';
-import * as userHandlers from '@/controllers/user';
+import { checkAuth } from '@/middlewares/auth';
 
 const router = express.Router();
 
-router.route('/').get(userHandlers.getUser);
+router.route('/').get(checkAuth, usersHandlers.getUser);
+router.route('/admin').get(checkAuth, usersHandlers.getAdmin);
 
 // fav teams
 router.post('/fav-teams/follow', usersHandlers.addFavTeam);

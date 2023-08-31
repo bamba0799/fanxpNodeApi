@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { generateOTP, sendOtpMessage } from '@/utils/auth/otp';
 import { generateToken } from '@/utils/auth/tokens';
 import { AxiosError } from 'axios';
+import bcrypt from 'bcrypt';
 
 export async function getAuth(req: Request, res: Response) {
   const { contact } = req.body;
@@ -138,6 +139,79 @@ export async function verifyOtp(req: Request, res: Response) {
   } catch (e: any) {
     res.json({
       name: e.name,
+      message: e.message,
+    });
+  }
+}
+
+export async function authAdmin(req: Request, res: Response) {
+  const { username, password } = req.body;
+
+  try {
+    if (!username || !password) {
+      res.status(400);
+      throw new Error('Missing parameters');
+    }
+
+    const admin = await prisma.admin
+      .findUnique({
+        where: {
+          username,
+        },
+      })
+      .catch((e) => {
+        res.status(422);
+        throw e;
+      });
+
+    if (admin == null) {
+      res.status(400);
+      throw new Error('Invalid credentials');
+    }
+
+    // verify password
+    const isPasswordsMatching = await bcrypt.compare(password, admin.password);
+
+    if (isPasswordsMatching === false) {
+      res.status(400);
+      throw new Error('Invalid credentials');
+    }
+
+    // generate tokens
+    const accessToken = await generateToken({
+      variant: 'access',
+      payload: {
+        id: admin.id,
+        username: admin.username,
+      },
+    });
+
+    const refreshToken = await generateToken({
+      variant: 'refresh',
+      payload: {
+        id: admin.id,
+        username: admin.username,
+      },
+    });
+
+    res.json({
+      accessToken,
+      refreshToken,
+    });
+  } catch (e: any) {
+    res.json({
+      name: e.name ?? 'Error',
+      message: e.message,
+    });
+  }
+}
+
+export async function logoutAdmin(req: Request, res: Response) {
+  try {
+    // ...
+  } catch (e: any) {
+    res.json({
+      name: e.name ?? 'Error',
       message: e.message,
     });
   }

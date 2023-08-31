@@ -1,4 +1,7 @@
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from '@/constants/variables';
+import {
+  ACCESS_TOKEN_SECRET,
+  REFRESH_TOKEN_SECRET,
+} from '@/constants/variables';
 import jwt from 'jsonwebtoken';
 
 type TokenType = 'access' | 'refresh';
@@ -13,7 +16,6 @@ type VerifyTokenProps = {
   type: TokenType;
 };
 
-
 /** Asynchronously generate an access or a refresh token. */
 export function generateToken({
   variant,
@@ -24,10 +26,10 @@ export function generateToken({
 
   // set the default config
   if (variant === 'access') {
-    secret = process.env.ACCESS_TOKEN_SECRET!;
+    secret = <string>ACCESS_TOKEN_SECRET;
     expiresIn = '1h';
   } else if (variant === 'refresh') {
-    secret = process.env.REFRESH_TOKEN_SECRET!;
+    secret = <string>REFRESH_TOKEN_SECRET!;
     expiresIn = '3d';
   }
 
@@ -49,13 +51,12 @@ export function generateToken({
   });
 }
 
-
 export function verifyToken(
-  props: VerifyTokenProps
+  props: VerifyTokenProps,
 ): Promise<string | jwt.JwtPayload> {
   let SECRET: string;
 
-  if (props.type === "access") {
+  if (props.type === 'access') {
     SECRET = <string>ACCESS_TOKEN_SECRET;
   } else {
     SECRET = <string>REFRESH_TOKEN_SECRET;

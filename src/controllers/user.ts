@@ -32,6 +32,32 @@ export async function getUser(req: Request, res: Response) {
   }
 }
 
+export async function getAdmin(req: Request, res: Response) {
+  try {
+    const user = await prisma.admin
+      .findUnique({
+        where: {
+          id: req.user.id,
+        },
+        select: {
+          id: true,
+          username: true,
+        },
+      })
+      .catch((e) => {
+        res.status(422);
+        throw e;
+      });
+
+    res.json(user);
+  } catch (e: any) {
+    res.json({
+      name: e.name ?? 'Error',
+      message: e.message,
+    });
+  }
+}
+
 // fav teams
 export async function addFavTeam(req: Request, res: Response) {
   const { userId, teamId } = req.body;
