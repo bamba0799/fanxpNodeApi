@@ -236,7 +236,7 @@ model InterestPoint {
 model Quiz {
   id                       String                     @id @default(uuid())
   label                    String
-  date                     DateTime?                  @db.Timestamp()
+  date                     DateTime                   @db.Timestamp()
   questions                Question[]
   questionQuizResponseUser QuestionQuizResponseUser[]
 }
@@ -277,8 +277,15 @@ model QuestionQuizResponseUser {
   @@unique([questionId, quizId, responseId, userId])
 }
 
+enum AdminRoles {
+  SU_ADMIN
+  ADMIN
+  POI
+}
+
 model Admin {
-  id       String @id @default(uuid())
-  username String @unique
-  password String @db.VarChar(255)
+  id       String     @id @default(uuid())
+  username String     @unique
+  password String     @db.VarChar(255)
+  role     AdminRoles @default(ADMIN)
 }
