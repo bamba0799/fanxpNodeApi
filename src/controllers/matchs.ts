@@ -2,29 +2,34 @@ import { prisma } from '@/lib/db';
 import { Request, Response } from 'express';
 
 export async function createMatch(req: Request, res: Response) {
-  const { date, time, status, stadiumId, stageId, homeTeamId, awayTeamId } =
-    req.body; //  status in 'over' | 'live' | 'next'
+  const {
+    date,
+    status,
+    time,
+    stadiumId,
+    stageId,
+    homeTeamId,
+    awayTeamId,
+    groupId,
+  } = req.body; //  status in 'over' | 'live' | 'next'
 
   try {
-    if (
-      !date ||
-      !time ||
-      !status ||
-      !stadiumId ||
-      !homeTeamId ||
-      !stageId ||
-      !awayTeamId
-    ) {
+    if (!date || !stadiumId || !homeTeamId || !stageId || !awayTeamId) {
       res.status(400);
       throw new Error('Missing parameters');
+    }
+
+    if (homeTeamId === awayTeamId) {
+      res.status(403);
+      throw new Error('Duplicate team');
     }
 
     const match = await prisma.match
       .create({
         data: {
-          date,
-          time,
-          status,
+          date: new Date(date).toISOString(),
+          time: new Date(time ?? date).toISOString(),
+          status: status ?? 'next',
           stadiumId,
           matchStageTeam: {
             createMany: {
