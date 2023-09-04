@@ -4,6 +4,8 @@ import * as quizHandlers from '@/controllers/quiz';
 const router = express.Router();
 
 router.post('/', quizHandlers.createQuiz);
+router.post('/givePointToUser', quizHandlers.givePointToUser)
+router.get('/:quizId', quizHandlers.getUserSumPointPerQuiz)
 router.get('/', quizHandlers.getManyQuiz);
 router.get('/:quizId', quizHandlers.getOneQuiz);
 router.put('/:quizId', quizHandlers.updateQuiz);

@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db';
-import { Request, Response } from 'express';
+import { Request, Response, response } from 'express';
+import { isModuleNamespaceObject } from 'util/types';
 
 export async function createQuiz(req: Request, res: Response) {
   const { label, date } = req.body;
@@ -30,6 +31,35 @@ export async function createQuiz(req: Request, res: Response) {
     });
   }
 }
+
+export async function givePointToUser(req:Request, res:Response) {
+  const {questionId, quizId, responseId, userId, point} = req.body
+
+  try{
+    const questionQuizResponseUser = await prisma.questionQuizResponseUser
+    .create({
+      data: {
+        questionId,
+        quizId,
+        responseId,
+        userId,
+        point
+      }
+    }).catch((e:any) => {
+      res.status(422);
+      throw e
+    })
+    res.status(200).json(questionQuizResponseUser)
+  } catch(error:any){
+    res.json({
+      name:error.name,
+      message:error.message
+
+    })
+  }
+}
+
+
 
 export async function getManyQuiz(req: Request, res: Response) {
   const { fields: qF } = req.query;
@@ -96,6 +126,30 @@ export async function getManyQuiz(req: Request, res: Response) {
       name: e.name,
       message: e.message,
     });
+  }
+}
+
+export async function getUserSumPointPerQuiz(req:Request, res:Response){
+  const id = req.params.quizId
+  console.log(id)
+  try{
+    const users = await prisma.questionQuizResponseUser
+    .groupBy({
+      by:['userId'],
+      _sum:{
+        point:true
+      },
+      where:{
+        quizId: id
+      }
+    
+  })
+    res.json(users)
+  }catch(e:any){
+    res.json({
+      name: e.name,
+      message: e.message,
+    })
   }
 }
 
@@ -227,3 +281,5 @@ export async function deleteQuiz(req: Request, res: Response) {
     });
   }
 }
+
+
