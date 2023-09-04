@@ -6,7 +6,7 @@ async function main() {
   await prisma.admin.create({
     data: {
       username: 'admin',
-      password: '$2y$10$bGCs6SMtui1Vu7.Ii5Qm8.p069FOuaoBQLpQszqBDYjhdF/u8EMke', // sufanxp (salt = 10)
+      password: '$2b$10$V8BDW.7.FLi/eZyW1JoMLe2mwRCDx1ts6k.cUHRi/IDdvnRWpkrgS', // sufanxp (salt = 10)
       role: 'SU_ADMIN',
     },
   });
