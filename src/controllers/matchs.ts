@@ -62,22 +62,33 @@ export async function createMatch(req: Request, res: Response) {
 }
 
 export async function getMatchs(req: Request, res: Response) {
-  const { date, fields: qF } = req.query;
+  const { date, fields: qF, stageId } = req.query;
 
   try {
     let result;
     let fields = qF ? (qF as string).split(',') : null;
 
-    // date based query
-    if (date) {
-      // partial date based query
+    // date & stage based query
+    if (date || stageId) {
+      // partial query
       if (fields) {
         result = await prisma.match
           .findMany({
             where: {
-              date: {
-                equals: new Date(<string>date),
-              },
+              date: date
+                ? {
+                    equals: new Date(<string>date),
+                  }
+                : undefined,
+              AND: stageId
+                ? {
+                    matchStageTeam: {
+                      every: {
+                        stageId: <string>stageId,
+                      },
+                    },
+                  }
+                : undefined,
             },
             select: {
               _count: fields.includes('_count'),
@@ -146,13 +157,24 @@ export async function getMatchs(req: Request, res: Response) {
         return res.json(result);
       }
 
-      // full date based query
+      // full query
       result = await prisma.match
         .findMany({
           where: {
-            date: {
-              equals: new Date(<string>date),
-            },
+            date: date
+              ? {
+                  equals: new Date(<string>date),
+                }
+              : undefined,
+            AND: stageId
+              ? {
+                  matchStageTeam: {
+                    every: {
+                      stageId: <string>stageId,
+                    },
+                  },
+                }
+              : undefined,
           },
           select: {
             id: true,
