@@ -160,7 +160,7 @@ model MatchStageTeam {
   yellowCard Int?
   // TODO: complete if possible
 
-  match Match @relation(fields: [matchId], references: [id])
+  match Match @relation(fields: [matchId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   stage Stage @relation(fields: [stageId], references: [id])
   team  Team  @relation(fields: [teamId], references: [id])
 
