@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://nabla:Nablsonde9907@192.168.252.91:8889/can2023?schema=public"
+  url      = env("DATABASE_URL")
 }
 
 model User {
