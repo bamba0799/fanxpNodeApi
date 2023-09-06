@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db';
-import { Request, Response, response } from 'express';
+import { Request, Response } from 'express';
 import { isModuleNamespaceObject } from 'util/types';
 
 export async function createQuiz(req: Request, res: Response) {
@@ -36,6 +36,11 @@ export async function givePointToUser(req:Request, res:Response) {
   const {questionId, quizId, responseId, userId, point} = req.body
 
   try{
+    if (!questionId || !quizId || !responseId || !userId || typeof point !== "number" || (typeof point === "number" && point < 0)) {
+      res.status(400);
+      throw new Error('Missing parameters');
+    }
+
     const questionQuizResponseUser = await prisma.questionQuizResponseUser
     .create({
       data: {
@@ -46,7 +51,7 @@ export async function givePointToUser(req:Request, res:Response) {
         point
       }
     }).catch((e:any) => {
-      res.status(422);
+      
       throw e
     })
     res.status(200).json(questionQuizResponseUser)
