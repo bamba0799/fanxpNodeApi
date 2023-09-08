@@ -8,6 +8,7 @@ router.route('/').get(checkAuth, usersHandlers.getUser);
 router.route('/admin').get(checkAuth, usersHandlers.getAdmin);
 
 // fav teams
+router.get('/userPerId/:userId', usersHandlers.getUserPerId)
 router.post('/fav-teams/follow', usersHandlers.addFavTeam);
 router.post('/fav-teams/unfollow', usersHandlers.removeFavTeam);
 router.post('/fav-teams', usersHandlers.getFavTeams);

@@ -296,3 +296,26 @@ export async function getOneFavTeam(req: Request, res: Response) {
     });
   }
 }
+
+
+export async function getUserPerId(req:Request, res:Response){
+const userId = req.body.userId
+try{
+const user = await prisma.user
+.findUnique({
+  where:{
+    id:userId
+  },
+  select:{
+    contact:true,
+    firstName:true,
+    lastName:true
+  }
+})
+console.log(user)
+res.json(user)
+}catch(e){
+  console.log('error',e)
+}
+
+}

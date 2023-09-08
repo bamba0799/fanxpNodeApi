@@ -1,3 +1,4 @@
+import { User } from './../../../node_modules/.prisma/client/index.d';
 import { prisma } from '@/lib/db';
 import { Request, Response } from 'express';
 import { isModuleNamespaceObject } from 'util/types';
@@ -146,9 +147,9 @@ export async function getUserSumPointPerQuiz(req:Request, res:Response){
       },
       where:{
         quizId: id
-      }
-    
-  })
+      },
+    })
+
     res.json(users)
   }catch(e:any){
     res.json({
