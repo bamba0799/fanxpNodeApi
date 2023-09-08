@@ -301,7 +301,7 @@ export async function getOneFavTeam(req: Request, res: Response) {
 export async function getUserPerId(req:Request, res:Response){
 const userId = req.body.userId
 try{
-const user = await prisma.user
+const user = await prisma.user //userPerId Api
 .findUnique({
   where:{
     id:userId
