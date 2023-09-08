@@ -139,24 +139,50 @@ export async function getUserSumPointPerQuiz(req:Request, res:Response){
   const id = req.params.quizId
   console.log(id)
   try{
-    const users = await prisma.questionQuizResponseUser
-    .groupBy({
-      by:['userId'],
-      _sum:{
-        point:true
+  
+    const users = await prisma.questionQuizResponseUser.groupBy({
+      by: ['userId'],
+      _sum: {
+        point: true,
       },
-      where:{
-        quizId: id
+      where: {
+        quizId: id,
       },
-    })
+    });
 
-    res.json(users)
-  }catch(e:any){
+    // Maintenant, effectuons une jointure avec la table "user"
+    const usersWithUserData = await prisma.user.findMany({
+      where: {
+        id: {
+          in: users.map((user) => user.userId),
+        },
+      },
+      select: {
+        id: true,
+        contact: true,
+        firstName:true
+        // Ajoutez ici les autres champs de l'utilisateur que vous souhaitez récupérer
+      },
+    });
+
+    // Combinez les données des deux requêtes
+    const result = users.map((user) => {
+      const userData = usersWithUserData.find((u) => u.id === user.userId);
+      return {
+        userId: user.userId,
+        contact: userData ? userData.contact : null,
+        totalPoints: user._sum.point,
+        firstName: userData ? userData.firstName : null,
+        // Ajoutez ici d'autres données d'utilisateur et de réponse au quiz si nécessaire
+      };
+    });
+
+    res.json(result);
+  } catch (e) {
     res.json({
-      name: e.name,
-      message: e.message,
-    })
-  }
+     e
+    });
+}
 }
 
 export async function getOneQuiz(req: Request, res: Response) {
