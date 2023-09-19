@@ -10,3 +10,4 @@ router.put('/:matchId', matchsHandlers.updateMatch);
 router.delete('/:matchId', matchsHandlers.deleteMatch);
 
 export default router;
+

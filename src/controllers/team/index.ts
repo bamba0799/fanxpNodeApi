@@ -15,6 +15,7 @@ export async function createTeam(req: Request, res: Response) {
     ) {
       res.status(400);
       throw new Error('Missing parameters');
+      
     }
 
     const team = await prisma.team

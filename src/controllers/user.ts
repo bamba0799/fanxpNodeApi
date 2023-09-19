@@ -2,9 +2,9 @@ import { prisma } from '@/lib/db';
 import { Request, Response } from 'express';
 
 export async function getUser(req: Request, res: Response) {
+  console.log("azee", req.user.id)
   try {
-    const user = await prisma.user
-      .findUnique({
+    const user = await prisma.user.findUnique({
         where: {
           id: req.user.id,
         },
@@ -13,9 +13,7 @@ export async function getUser(req: Request, res: Response) {
           contact: true,
           firstName: true,
           lastName: true,
-          nationality: true,
-          address: true,
-          residence: true,
+        
         },
       })
       .catch((e) => {
@@ -309,7 +307,12 @@ const user = await prisma.user //userPerId Api
   select:{
     contact:true,
     firstName:true,
-    lastName:true
+    lastName:true,
+    address:true,
+    nationality:true,
+    residence:true,
+    photo:true,
+
   }
 })
 console.log(user)

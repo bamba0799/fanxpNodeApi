@@ -18,7 +18,7 @@ model User {
   residence                String?                    @db.VarChar(100)
   nationality              String?                    @db.VarChar(100)
   contact                  String                     @unique @db.VarChar(20)
-  photo                    String?                    @db.Text
+  photo                    String?                    @db.LongText
   matchTicketUser          MatchTicketUser[]
   questionQuizResponseUser QuestionQuizResponseUser[]
   followedTeams            TeamUser[]

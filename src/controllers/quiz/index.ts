@@ -160,7 +160,9 @@ export async function getUserSumPointPerQuiz(req:Request, res:Response){
       select: {
         id: true,
         contact: true,
-        firstName:true
+        firstName:true,
+        photo:true,
+        address:true
         // Ajoutez ici les autres champs de l'utilisateur que vous souhaitez récupérer
       },
     });
@@ -173,6 +175,9 @@ export async function getUserSumPointPerQuiz(req:Request, res:Response){
         contact: userData ? userData.contact : null,
         totalPoints: user._sum.point,
         firstName: userData ? userData.firstName : null,
+        photo: userData ? userData.photo : null,
+        address: userData ? userData.address : null,
+        
         // Ajoutez ici d'autres données d'utilisateur et de réponse au quiz si nécessaire
       };
     });

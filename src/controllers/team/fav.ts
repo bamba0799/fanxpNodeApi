@@ -30,6 +30,8 @@ export async function getFavTeams(req: Request, res: Response) {
 export async function remove(req: Request, res: Response) {
   try {
     const { userId, teamId } = req.body;
+    console.log("remove",req.body)
+
 
     await prisma.teamUser
       .delete({
@@ -57,6 +59,7 @@ export async function remove(req: Request, res: Response) {
 export async function post(req: Request, res: Response) {
   try {
     const { teamId, userId, isMemberOfCurrentCAN } = req.body;
+   
 
     if (!teamId || !userId || isMemberOfCurrentCAN == null) {
       res.status(400);

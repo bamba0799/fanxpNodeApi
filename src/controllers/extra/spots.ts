@@ -10,6 +10,7 @@ export async function createSpot(req: Request, res: Response) {
     shortDescription,
     categoryId,
     vip,
+    photo,
   } = req.body;
 
   try {
@@ -20,7 +21,8 @@ export async function createSpot(req: Request, res: Response) {
       !name ||
       !shortDescription ||
       !categoryId ||
-      vip == null
+      vip == null ||
+      !photo
     ) {
       res.status(400);
       throw new Error('Missing parameters');
@@ -35,6 +37,7 @@ export async function createSpot(req: Request, res: Response) {
           name,
           shortDescription,
           vip,
+          photo,
           InterestPointCategory: {
             connect: {
               id: categoryId,
